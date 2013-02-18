@@ -26,6 +26,8 @@ def parsedDate(dateStr):
     time.strftime('%Y%m%d-%H%M%S',pDate)
   except ValueError:
     pDate = None
+  except TypeError:
+    pDate = None
 
   return pDate or (0,0,0,0,0,0,0,0,0)
 
