@@ -20,9 +20,8 @@ def parsedDate(dateStr):
   pDate = email.Utils.parsedate(dateStr)
   if not pDate:
     pDate = email.Utils.parsedate(dateStr.replace('.',':'))
-  if not pDate:
-    raise ValueError('Cannot parse date: "%s"' % dateStr)
-  return pDate
+  # returning 0's if non date passed in
+  return pDate or (0,0,0,0,0,0,0,0,0)
 
 def fname(hash):
   (hID,hDate,hFrom,hSubj) = hash.split('|')
