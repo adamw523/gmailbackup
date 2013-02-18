@@ -21,15 +21,25 @@ def parsedDate(dateStr):
   if not pDate:
     pDate = email.Utils.parsedate(dateStr.replace('.',':'))
   # returning 0's if non date passed in
+  try:
+    # Try using the time to make sure bad values have not been passed in
+    time.strftime('%Y%m%d-%H%M%S',pDate)
+  except ValueError:
+    pDate = None
+
   return pDate or (0,0,0,0,0,0,0,0,0)
 
 def fname(hash):
-  (hID,hDate,hFrom,hSubj) = hash.split('|')
-  f = '%s-%s-%s' % (
-    time.strftime('%Y%m%d-%H%M%S',parsedDate(hDate)),
-    re.sub('[:. ]+','_',hFrom.split(' ')[-1]),
-    re.sub('[:. ]+','_',hSubj)
-  )
+  try:
+    (hID,hDate,hFrom,hSubj) = hash.split('|')
+    f = '%s-%s-%s' % (
+      time.strftime('%Y%m%d-%H%M%S',parsedDate(hDate)),
+      re.sub('[:. ]+','_',hFrom.split(' ')[-1]),
+      re.sub('[:. ]+','_',hSubj)
+    )
+  except ValueError:
+    # default to epoch if ValueError
+    f = time.gmtime(0)
   return f
 
 class ImapServer:
